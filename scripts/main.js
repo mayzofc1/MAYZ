@@ -20,8 +20,8 @@ const musicPlay = new Audio('./sons/play.wav');
 const musicPause = new Audio('./sons/pause.mp3');
 const musicEnd = new Audio('./sons/beep.mp3');
 
-let tempoDecorridoEmSegundos = 25 * 60;
-let intervaloId = null
+let tempoDecorridoEmSegundos = 2;
+let intervaloId = null;
 
 // Adiciona loop na musica e define o volume em 50%
 
@@ -45,7 +45,7 @@ musicInput.addEventListener('change', () => {
 
 focoBtn.addEventListener("click", () => {
     zerar();
-    tempoDecorridoEmSegundos = 25 * 60;
+    tempoDecorridoEmSegundos = 1;
     mostrarTempo();
     alterarContexto('foco');
     focoBtn.classList.add('active');
@@ -111,6 +111,11 @@ const contagemRegressiva = () => {
     if (tempoDecorridoEmSegundos <= 0) {
         musicEnd.play();
         alert('Tempo Finalizado');
+        const focoAtivo = html.getAttribute('data-contexto') == 'foco';
+        if (focoAtivo) {
+            const event = new CustomEvent('FocoFinalizado');
+            document.dispatchEvent(event);
+        }
         zerar();
         return;
     }
